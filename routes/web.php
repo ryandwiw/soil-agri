@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\LandingController;
@@ -33,16 +34,24 @@ Route::middleware(['admin'])->group(function () {
     Route::prefix('products')->group(function () {
         Route::get('/create', [ProductController::class, 'create'])->name('products.create');
         Route::post('/', [ProductController::class, 'store'])->name('products.store');
-        
+
         Route::get('/{slug}/edit', [ProductController::class, 'edit'])->name('products.edit');
         Route::put('/{slug}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/{slug}', [ProductController::class, 'destroy'])->name('products.destroy');
     });
 
+    Route::prefix('invoices')->group(function () {
+        Route::get('/', [InvoiceController::class, 'index'])->name('invoices.dashboard');
+        Route::get('/create', [InvoiceController::class, 'create'])->name('invoices.create');
+        Route::post('/store', [InvoiceController::class, 'store'])->name('invoices.store');
+        Route::get('/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
+        Route::get('/{id}/print', [InvoiceController::class, 'print'])->name('invoices.print');
+    });
+
     Route::prefix('articles')->group(function (){
         Route::get('/create', [ArticleController::class, 'create'])->name('articles.create');
         Route::post('/', [ArticleController::class, 'store'])->name('articles.store');
-        
+
         Route::get('/{slug}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
         Route::put('/{slug}', [ArticleController::class, 'update'])->name('articles.update');
         Route::delete('/{slug}', [ArticleController::class, 'destroy'])->name('articles.destroy');
