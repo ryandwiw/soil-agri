@@ -1,24 +1,33 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container mt-5 bg-white border border-black shadow-lg" style="padding: 60px;">
-        <div class="row align-items-center ">
+    <style>
+        .table-dark {
+            --bs-table-bg: #354554;
+        }
+        .table-light{
+            --bs-table-bg : #F1F1F1;
+        }
+    </style>
+
+    <div class="container mt-5 bg-white border border-black shadow-lg p-5">
+        <div class="row align-items-start p-0">
             <div class="col-7">
                 <img src="{{ asset('main/Other/logo.png') }}" alt="" class="img-fluid">
             </div>
-            <div class="col-5 ">
+            <div class="col-5 mt-4">
                 <div class="row mb-2">
-                    <div class="col-12 text-end fs-4 fw-light text-primary"><strong>Invoice</strong></div>
+                    <div class="col-12 text-end fs-4 fw-light" style="color:rgb(55, 99, 136)">Invoice</div>
                 </div>
-                <div class="row ">
+                <div class="row">
                     <div class="col-6 text-end"><strong>Referensi</strong></div>
                     <div class="col-6 text-end">{{ $invoice->referensi }}</div>
                 </div>
-                <div class="row ">
+                <div class="row">
                     <div class="col-6 text-end"><strong>Tanggal</strong></div>
                     <div class="col-6 text-end">{{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d/m/Y') }}</div>
                 </div>
-                <div class="row ">
+                <div class="row">
                     <div class="col-6 text-end"><strong>Tgl. Jatuh Tempo</strong></div>
                     <div class="col-6 text-end">{{ \Carbon\Carbon::parse($invoice->due_date)->format('d/m/Y') }}</div>
                 </div>
@@ -28,7 +37,7 @@
         <div class="row mb-4">
             <div class="col-5">
                 <p class="fw-bold mt-3">Info Perusahaan</p>
-                <div class="my-2" style="border-top: 2px solid #000;"></div>
+                <div class="my-2" style="border-top: 2px solid #354554;"></div>
 
                 <p class="fw-bold">{{ $invoice->company_name }}</p>
 
@@ -54,7 +63,7 @@
 
             <div class="col-6">
                 <p class="fw-bold mt-3">Tagihan Untuk</p>
-                <div class="my-2" style="border-top: 2px solid #000;"></div>
+                <div class="my-2" style="border-top: 2px solid #354554;"></div>
 
                 @if (!empty($invoice->company_profile_tujuan))
                     <p class="fw-bold">{{ $invoice->company_profile_tujuan }}</p>
@@ -106,48 +115,84 @@
                 <p class="mb-0">Telp: {{ $formattedPhoneNumber }}</p>
             </div>
 
-            <table class="table table-bordered mt-5">
-                <thead class="table-primary text-white">
-                    <tr>
-                        <th>Produk</th>
-                        <th style="width: 80px;" class="text-center">Kuantitas</th>
-                        <th style="width: 80px;" class="text-center">Satuan</th>
-                        <th style="width: 140px;" class="text-end">Harga</th>
-                        <th style="width: 140px;" class="text-end">Jumlah</th>
-                    </tr>
-                </thead>
-                <tbody class="table-light">
-                    @if (!empty($items) && is_array($items))
-                        @foreach ($items as $item)
-                            <tr>
-                                <td>
-                                    <p class="m-0 fw-bold">
-                                        {{ $item['product'] ?? 'N/A' }}
-                                    </p>
-                                    <p class="m-0">
-                                        {{ $item['nickname'] ?? 'N/A' }}
-                                    </p>
-                                </td>
-                                <td style="width: 80px; text-align: center; vertical-align: middle;">{{ $item['quantity'] ?? 'N/A' }}</td>
-                                <td style="width: 80px; text-align: center; vertical-align: middle;">{{ $item['unit'] ?? 'N/A' }}</td>
-                                <td style="width: 140px; text-align: end; vertical-align: middle;">
-                                    {{ number_format($item['price'] ?? 0, 2, ',', '.') }}</td>
-                                <td style="width: 140px; text-align: end; vertical-align: middle;">
-                                    {{ number_format($item['total'] ?? 0, 2, ',', '.') }}</td>
-                            </tr>
-                        @endforeach
-                    @else
+            <div class="p-2">
+                <table class="table mt-4">
+                    <thead class="table-dark text-white">
                         <tr>
-                            <td colspan="5" class="text-center">Tidak ada item untuk ditampilkan.</td>
+                            <th>Produk</th>
+                            <th style="width: 80px; text-align: center;">Kuantitas</th>
+                            <th style="width: 80px; text-align: center;">Satuan</th>
+                            <th style="width: 140px; text-align: end;">Harga</th>
+                            <th style="width: 140px; text-align: end;">Jumlah</th>
                         </tr>
-                    @endif
-                </tbody>
-            </table>
-
-            <div class="mt-4">
-                <h4>Total</h4>
-                <p><strong>Subtotal:</strong> Rp {{ number_format($invoice->subtotal ?? 0, 2, ',', '.') }}</p>
-                <p><strong>Total:</strong> Rp {{ number_format($invoice->total ?? 0, 2, ',', '.') }}</p>
+                    </thead>
+                    <tbody class="table-light" style="border: 4px solid white;">
+                        @if (!empty($items) && is_array($items))
+                            @foreach ($items as $item)
+                                <tr style="border: 4px solid white;">
+                                    <td style="border: 4px solid white;">
+                                        <p class="m-0 fw-bold">{{ $item['product'] ?? 'N/A' }}</p>
+                                        <p class="m-0">{{ $item['nickname'] ?? 'N/A' }}</p>
+                                    </td>
+                                    <td
+                                        style="width: 80px; text-align: center; vertical-align: middle; border: 4px solid white;">
+                                        {{ $item['quantity'] ?? 'N/A' }}
+                                    </td>
+                                    <td
+                                        style="width: 80px; text-align: center; vertical-align: middle; border: 4px solid white;">
+                                        {{ $item['unit'] ?? 'N/A' }}
+                                    </td>
+                                    <td
+                                        style="width: 140px; text-align: end; vertical-align: middle; border: 4px solid white;">
+                                        {{ number_format($item['price'] ?? 0, 2, ',', '.') }}
+                                    </td>
+                                    <td
+                                        style="width: 140px; text-align: end; vertical-align: middle; border: 4px solid white;">
+                                        {{ number_format($item['total'] ?? 0, 2, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr style="border: 3px solid white;">
+                                <td colspan="5" class="text-center" style="border: 3px solid white;">Tidak ada item untuk
+                                    ditampilkan.</td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
             </div>
+
+
+            <div class="row ms-2 mt-3">
+                <div class="col-6 "></div>
+                <div class="col-6 text-body-secondary">
+                    <div class="row mb-2">
+                        <div class="col-6 text-start fw-semibold">Subtotal</div>
+                        <div class="col-6 text-end">Rp {{ number_format($invoice->subtotal ?? 0, 2, '.', ',') }}</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-6 text-start fw-semibold">Total</div>
+                        <div class="col-6 text-end">Rp {{ number_format($invoice->total ?? 0, 2, '.', ',') }}</div>
+                    </div>
+                    <div class="row " style="font-size: 0.98rem;">
+                        <div class="col-6 text-start fw-semibold">Sisa Tagihan:</div>
+                        <div class="col-6 text-end ">Rp {{ number_format($invoice->total ?? 0, 2, '.', ',') }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row  mt-5">
+                <div class="col-9 "></div>
+                <div class="col-3 ">
+                    <div class="text center fw-bold">
+                        <p style="margin-bottom: 100px;">
+                            {{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M, Y') }}
+                        </p>
+
+                        <p>Amrizal Ivan</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
     @endsection

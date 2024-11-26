@@ -144,10 +144,16 @@
                 </tbody>
             </table>
 
-            <div class="mt-4">
-                <h4>Total</h4>
-                <p><strong>Subtotal:</strong> Rp {{ number_format($invoice->subtotal ?? 0, 2, ',', '.') }}</p>
-                <p><strong>Total:</strong> Rp {{ number_format($invoice->total ?? 0, 2, ',', '.') }}</p>
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6">
+                    <div class="mt-4">
+                        <p><strong>Subtotal:</strong> Rp {{ number_format($invoice->subtotal ?? 0, 2, ',', '.') }}</p>
+                        <p><strong>Total:</strong> Rp {{ number_format($invoice->total ?? 0, 2, ',', '.') }}</p>
+                        <p><strong>Sisa Tagihan:</strong> Rp {{ number_format($invoice->total ?? 0, 2, ',', '.') }}</p>
+                    </div>
+                </div>
             </div>
+
         </div>
     @endsection
