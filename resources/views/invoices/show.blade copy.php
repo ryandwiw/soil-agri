@@ -194,7 +194,5 @@
                 </div>
             </div>
 
-        <a href="{{ route('invoices.print', ['id' => $invoice->id]) }}" >Print Invoice</a>
-
         </div>
     @endsection

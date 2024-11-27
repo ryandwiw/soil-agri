@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use Illuminate\Http\Request;
-// use Barryvdh\DomPDF\Facade as PDF;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class InvoiceController extends Controller
@@ -63,16 +62,28 @@ class InvoiceController extends Controller
     {
         // Mengambil invoice berdasarkan ID
         $invoice = Invoice::findOrFail($id);
+
         // Mengonversi items dari JSON ke array
         $items = json_decode($invoice->items, true);
 
-        // Menghasilkan PDF
-        $pdf = PDF::loadView('invoices.pdf', compact('invoice', 'items'));
-
-        // Mengganti karakter yang tidak valid
-        $filename = 'invoice_' . str_replace(['/', '\\', ' '], ['-', '-', '_'], $invoice->referensi) . '.pdf';
-
-        // Menampilkan PDF di browser
-        return $pdf->stream($filename);
+        // Mengembalikan view dengan data invoice dan items
+        return view('invoices.pdf', compact('invoice', 'items'));
     }
+
+    // public function print($id)
+    // {
+    //     // Mengambil invoice berdasarkan ID
+    //     $invoice = Invoice::findOrFail($id);
+    //     // Mengonversi items dari JSON ke array
+    //     $items = json_decode($invoice->items, true);
+
+    //     // Menghasilkan PDF
+    //     $pdf = PDF::loadView('invoices.pdf', compact('invoice', 'items'));
+
+    //     // Mengganti karakter yang tidak valid
+    //     $filename = 'invoice_' . str_replace(['/', '\\', ' '], ['-', '-', '_'], $invoice->referensi) . '.pdf';
+
+    //     // Menampilkan PDF di browser
+    //     return $pdf->stream($filename);
+    // }
 }
